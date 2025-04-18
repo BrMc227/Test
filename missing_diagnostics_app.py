@@ -3,11 +3,11 @@ import streamlit as st
 import matplotlib.pyplot as plt # Keep for potential future use if needed
 import seaborn as sns # Keep for potential future use if needed
 
-# --- Page Configuration ---
+#  Page Configuration 
 st.set_page_config(page_title="High Missing Test Classes", layout="wide")
 st.title('Classes with High Missing Diagnostic Test Rates (>50%)')
 
-# --- Data Loading and Processing ---
+# Data Loading and Processing 
 @st.cache_data # Cache the data loading and initial processing
 def load_and_process_data():
     try:
@@ -28,7 +28,7 @@ def load_and_process_data():
     # Identify students with any missing diagnostic test
     df['Has_Missing_Diagnostics'] = df[diagnostic_scores].isnull().any(axis=1)
 
-    # --- Class Level Analysis ---
+    #  Class Level Analysis
     group_cols = ['schoolId', 'Grade', 'classId', 'Form']
 
     # 1. Calculate overall missing % (students missing *any* test)
@@ -72,11 +72,11 @@ def load_and_process_data():
 
     return high_missing_classes
 
-# --- Load Data ---
+# Load Data 
 # This 'processed_data' DataFrame contains ALL classes meeting the initial >50% criteria
 processed_data = load_and_process_data()
 
-# --- Sidebar Filters ---
+# Sidebar Filters 
 st.sidebar.header("Filters")
 
 # Filter by Form (Multiselect) - Affects both table and visualization
@@ -91,13 +91,13 @@ if processed_data is not None:
     school_options = ['All'] + sorted(processed_data['School ID'].unique())
 selected_school = st.sidebar.selectbox("Select School (for Table)", school_options, index=0) # Default to "All"
 
-# Filter by Grade (Dropdown with "All") - Primarily affects table
+# Filter by Grade (Dropdown with "All")
 grade_options = ['All']
 if processed_data is not None:
     grade_options = ['All'] + sorted(processed_data['Grade'].unique())
 selected_grade = st.sidebar.selectbox("Select Grade (for Table)", grade_options, index=0) # Default to "All"
 
-# --- Export Option ---
+# Export Option 
 st.sidebar.header("Export Table Data")
 @st.cache_data # Cache the conversion
 def convert_df_to_csv(df_to_convert):
@@ -111,11 +111,11 @@ filtered_data_for_table = pd.DataFrame()
 if processed_data is not None:
     filtered_data_for_table = processed_data.copy() # Initialize before filtering
 
-# --- Main Area with Tabs ---
+#  Main Area with Tabs 
 if processed_data is not None and not processed_data.empty:
     tab1, tab2 = st.tabs(["Detailed Class View", "School Summary"])
 
-    # --- Tab 1: Detailed Class View ---
+    # Tab 1: Detailed Class View 
     with tab1:
         st.subheader("Filtered Class Data (>50% Students Missing Any Test)")
 
@@ -147,7 +147,7 @@ if processed_data is not None and not processed_data.empty:
             use_container_width=True
         )
 
-    # --- Tab 2: School Summary Visualization ---
+    # School Summary Visualization
     with tab2:
         st.subheader("Schools with Most High-Missing Classes")
         st.write(f"Count of classes per school where >50% of students missed at least one test (filtered by selected Forms: {', '.join(selected_forms) or 'None'}). The School/Grade filters do not apply here.")
@@ -171,7 +171,7 @@ if processed_data is not None and not processed_data.empty:
         else:
             st.info("No data available for the selected forms.")
 
-    # --- Enable Export Button ---
+    # Export Button 
     # Placed outside tabs, but uses data filtered for the table
     csv = convert_df_to_csv(filtered_data_for_table)
     st.sidebar.download_button(
