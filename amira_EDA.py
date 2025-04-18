@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-import os # To check for file existence
+import os 
 
 # variables
 BOY_FILE = 'quality_takehome_BOY_file.csv'
@@ -446,7 +446,7 @@ def print_detailed_tables(high_schools, high_classes, threshold):
          print(f"\nNo class data available to display for >{threshold}% missing.")
 
 
-# --- UPDATED Plotting Function ---
+# --- Plotting ---
 def create_grade_form_plot(df, grade_order, output_file):
     """Creates and saves the bar chart of missing diagnostics by Grade and Form."""
     if df is None or df.empty or 'Has_Missing_Diagnostics' not in df.columns:
